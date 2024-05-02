@@ -1,22 +1,22 @@
-import { cdn } from "./cdn";
-import vue from "@vitejs/plugin-vue";
-import { viteBuildInfo } from "./info";
-import svgLoader from "vite-svg-loader";
-import type { PluginOption } from "vite";
-import vueJsx from "@vitejs/plugin-vue-jsx";
-import { configCompressPlugin } from "./compress";
-import removeNoMatch from "vite-plugin-router-warn";
-import { visualizer } from "rollup-plugin-visualizer";
-import removeConsole from "vite-plugin-remove-console";
-import { themePreprocessorPlugin } from "@pureadmin/theme";
-import { genScssMultipleScopeVars } from "../src/layout/theme";
-import { vitePluginFakeServer } from "vite-plugin-fake-server";
+import { cdn } from "./cdn"
+import vue from "@vitejs/plugin-vue"
+import { viteBuildInfo } from "./info"
+import svgLoader from "vite-svg-loader"
+import type { PluginOption } from "vite"
+import vueJsx from "@vitejs/plugin-vue-jsx"
+import { configCompressPlugin } from "./compress"
+import removeNoMatch from "vite-plugin-router-warn"
+import { visualizer } from "rollup-plugin-visualizer"
+import removeConsole from "vite-plugin-remove-console"
+import { themePreprocessorPlugin } from "@pureadmin/theme"
+import { genScssMultipleScopeVars } from "../src/layout/theme"
+// import { vitePluginFakeServer } from "vite-plugin-fake-server";
 
 export function getPluginsList(
   VITE_CDN: boolean,
   VITE_COMPRESSION: ViteCompression
 ): PluginOption[] {
-  const lifecycle = process.env.npm_lifecycle_event;
+  const lifecycle = process.env.npm_lifecycle_event
   return [
     vue(),
     // jsx、tsx语法支持
@@ -29,18 +29,18 @@ export function getPluginsList(
      */
     removeNoMatch(),
     // mock支持
-    vitePluginFakeServer({
-      logger: false,
-      include: "mock",
-      infixName: false,
-      enableProd: true
-    }),
+    // vitePluginFakeServer({
+    //   logger: false,
+    //   include: "mock",
+    //   infixName: false,
+    //   enableProd: true
+    // }),
     // 自定义主题
     themePreprocessorPlugin({
       scss: {
         multipleScopeVars: genScssMultipleScopeVars(),
-        extract: true
-      }
+        extract: true,
+      },
     }),
     // svg组件化支持
     svgLoader(),
@@ -51,6 +51,6 @@ export function getPluginsList(
     // 打包分析
     lifecycle === "report"
       ? visualizer({ open: true, brotliSize: true, filename: "report.html" })
-      : (null as any)
-  ];
+      : (null as any),
+  ]
 }

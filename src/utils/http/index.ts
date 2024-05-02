@@ -14,6 +14,8 @@ import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from "@/store/modules/user";
 
+const { VITE_ENV } = import.meta.env;
+
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
   // 请求超时时间
@@ -23,6 +25,7 @@ const defaultConfig: AxiosRequestConfig = {
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest"
   },
+  withCredentials: true,
   // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）
   paramsSerializer: {
     serialize: stringify as unknown as CustomParamsSerializer
@@ -155,6 +158,7 @@ class PureHttp {
     const config = {
       method,
       url,
+      baseURL: VITE_ENV === 'dev' ? '/api' : '',
       ...param,
       ...axiosConfig
     } as PureHttpRequestConfig;
