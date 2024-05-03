@@ -33,4 +33,4 @@ export default {
       }
     }
   ]
-} satisfies RouteConfigsTable;
+} as RouteConfigsTable;

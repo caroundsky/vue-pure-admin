@@ -12,7 +12,7 @@ import type {
 import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
-import { useUserStoreHook } from "@/store/modules/user";
+import { useUserStore, useUserStoreHook } from "@/store/modules/user";
 
 const { VITE_ENV } = import.meta.env;
 
@@ -158,7 +158,7 @@ class PureHttp {
     const config = {
       method,
       url,
-      baseURL: VITE_ENV === 'dev' ? '/api' : '',
+      baseURL: VITE_ENV === "dev" ? "/api" : "",
       ...param,
       ...axiosConfig
     } as PureHttpRequestConfig;
@@ -171,6 +171,10 @@ class PureHttp {
           resolve(response);
         })
         .catch(error => {
+          if (error.response.status === 401) {
+            useUserStore().logOut();
+            return;
+          }
           reject(error);
         });
     });

@@ -47,6 +47,7 @@
     "url": "https://github.com/xiaoxian521"
   },
   "dependencies": {
+    "@laomao800/vue-listview": "3",
     "@pureadmin/descriptions": "^1.2.1",
     "@pureadmin/table": "^3.1.2",
     "@pureadmin/utils": "^2.4.7",
