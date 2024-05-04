@@ -1,50 +1,50 @@
 <script setup lang="ts">
-import Footer from "./footer/index.vue";
-import { useGlobal, isNumber } from "@pureadmin/utils";
-import KeepAliveFrame from "./keepAliveFrame/index.vue";
-import backTop from "@/assets/svg/back_top.svg?component";
-import { h, computed, Transition, defineComponent } from "vue";
-import { usePermissionStoreHook } from "@/store/modules/permission";
+import Footer from "./footer/index.vue"
+import { useGlobal, isNumber } from "@pureadmin/utils"
+import KeepAliveFrame from "./keepAliveFrame/index.vue"
+import backTop from "@/assets/svg/back_top.svg?component"
+import { h, computed, Transition, defineComponent } from "vue"
+import { usePermissionStoreHook } from "@/store/modules/permission"
 
 const props = defineProps({
   fixedHeader: Boolean
-});
+})
 
-const { $storage, $config } = useGlobal<GlobalPropertiesApi>();
+const { $storage, $config } = useGlobal<GlobalPropertiesApi>()
 
 const isKeepAlive = computed(() => {
-  return $config?.KeepAlive;
-});
+  return $config?.KeepAlive
+})
 
 const transitions = computed(() => {
   return route => {
-    return route.meta.transition;
-  };
-});
+    return route.meta.transition
+  }
+})
 
 const hideTabs = computed(() => {
-  return $storage?.configure.hideTabs;
-});
+  return $storage?.configure.hideTabs
+})
 
 const hideFooter = computed(() => {
-  return $storage?.configure.hideFooter;
-});
+  return $storage?.configure.hideFooter
+})
 
 const stretch = computed(() => {
-  return $storage?.configure.stretch;
-});
+  return $storage?.configure.stretch
+})
 
 const layout = computed(() => {
-  return $storage?.layout.layout === "vertical";
-});
+  return $storage?.layout.layout === "vertical"
+})
 
 const getMainWidth = computed(() => {
   return isNumber(stretch.value)
     ? stretch.value + "px"
     : stretch.value
       ? "1440px"
-      : "100%";
-});
+      : "100%"
+})
 
 const getSectionStyle = computed(() => {
   return [
@@ -59,8 +59,8 @@ const getSectionStyle = computed(() => {
             ? "min-height: calc(100vh - 48px);"
             : "min-height: calc(100vh - 86px);"
         }`
-  ];
-});
+  ]
+})
 
 const transitionMain = defineComponent({
   props: {
@@ -71,9 +71,9 @@ const transitionMain = defineComponent({
   },
   render() {
     const transitionName =
-      transitions.value(this.route)?.name || "fade-transform";
-    const enterTransition = transitions.value(this.route)?.enterTransition;
-    const leaveTransition = transitions.value(this.route)?.leaveTransition;
+      transitions.value(this.route)?.name || "fade-transform"
+    const enterTransition = transitions.value(this.route)?.enterTransition
+    const leaveTransition = transitions.value(this.route)?.leaveTransition
     return h(
       Transition,
       {
@@ -90,9 +90,9 @@ const transitionMain = defineComponent({
       {
         default: () => [this.$slots.default()]
       }
-    );
+    )
   }
-});
+})
 </script>
 
 <template>
@@ -148,7 +148,7 @@ const transitionMain = defineComponent({
                   />
                 </transitionMain>
               </div>
-              <Footer v-if="!hideFooter" />
+              <!-- <Footer v-if="!hideFooter" /> -->
             </el-scrollbar>
             <div v-else class="grow">
               <transitionMain :route="route">
@@ -178,7 +178,7 @@ const transitionMain = defineComponent({
     </router-view>
 
     <!-- 页脚 -->
-    <Footer v-if="!hideFooter && !props.fixedHeader" />
+    <!-- <Footer v-if="!hideFooter && !props.fixedHeader" /> -->
   </section>
 </template>
 
