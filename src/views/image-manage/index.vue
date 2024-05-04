@@ -1,27 +1,63 @@
 <template>
   <div class="image-manage">
-    <Listview v-bind="lvConfig" />
+    <Listview class="listview" v-bind="lvConfig" />
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 // @ts-ignore
 import { Listview } from "@laomao800/vue-listview"
 import { ref, reactive } from "vue"
 
 import { baseUrlApi } from "@/utils"
 import { getToken, formatToken } from "@/utils/auth"
+import { Edit } from "@element-plus/icons-vue"
 
 defineOptions({
   name: "ImageManage"
 })
 
 const filterModel = reactive({})
+const filterButtons = [
+  {
+    text: "添加",
+    type: "success",
+    onClick: () => {}
+  }
+]
 const tableColumns = [
   {
-    label: "业务来源单号",
+    label: "图片",
+    width: "150",
+    prop: "url",
+    render: ({ row }) => {
+      return (
+        <el-image
+          style="width: 60px; height: 60px"
+          src={row.url}
+          fit="contain"
+          preview-src-list={[row.url]}
+          preview-teleported={true}
+        />
+      )
+    }
+  },
+  {
+    label: "图片名称",
     minWidth: "150",
-    prop: "customerOrderNo"
+    prop: "name"
+  },
+  {
+    label: "标签",
+    minWidth: "150",
+    prop: "tag"
+  },
+  {
+    label: "操作",
+    width: "100",
+    render: () => {
+      return <elButton type="primary" size="small" icon={Edit} />
+    }
   }
 ]
 
@@ -39,17 +75,18 @@ const lvConfig = ref({
     pageSize: "pageSize"
   },
   contentDataMap: {
-    items: "result.results",
-    total: "result.total"
+    items: "data.result",
+    total: "data.total"
   },
   filterModel,
+  filterButtons,
   tableColumns
 })
 </script>
 
 <style lang="scss" scoped>
 .image-manage {
-  height: 100%;
+  height: 89vh;
   &.main-content {
     margin: 0;
     padding: 10px;
