@@ -38,17 +38,36 @@
 
 <script setup lang="tsx">
 import { reactive } from "vue"
-// import { ElForm, ElFormItem, ElInput } from "element-plus"
+import { modifyImage } from "@/api/images-manage"
+import { message } from "@/utils/message"
 
 defineOptions({
   name: "ImagesModal"
 })
+
+const { rowData } = defineProps(["rowData"])
 
 const form = reactive({
   url: "",
   name: "",
   desc: "",
   tag: null
+})
+
+Object.assign(form, rowData)
+
+async function submit({ loading, search }) {
+  loading(true)
+  const { success } = await modifyImage({ id: rowData.id, ...form }).catch(() =>
+    loading(false)
+  )
+  if (!success) return
+  message("保持成功", { type: "success" })
+  search()
+}
+
+defineExpose({
+  submit
 })
 </script>
 

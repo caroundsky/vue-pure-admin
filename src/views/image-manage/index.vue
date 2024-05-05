@@ -1,6 +1,6 @@
 <template>
   <div class="image-manage">
-    <Listview class="listview" v-bind="lvConfig" />
+    <Listview class="listview" v-bind="lvConfig" ref="listview" />
   </div>
 </template>
 
@@ -20,35 +20,13 @@ defineOptions({
   name: "ImageManage"
 })
 
+const listview = ref(null)
 const filterModel = reactive({})
 const filterButtons = [
   {
     text: "添加",
     type: "success",
-    onClick: () => {
-      useDialog({
-        title: "添加图片",
-        width: "800px",
-        fullScreenEnable: false,
-        content: <Modal />,
-        buttons: [
-          {
-            label: "确认",
-            type: "primary",
-            loading: false,
-            onClick: ({ vm }) => {
-              vm.hide()
-            }
-          },
-          {
-            label: "取消",
-            onClick: ({ vm }) => {
-              vm.hide()
-            }
-          }
-        ]
-      })
-    }
+    onClick: () => handleModal()
   }
 ]
 const tableColumns = [
@@ -79,10 +57,22 @@ const tableColumns = [
     prop: "tag"
   },
   {
+    label: "更新时间",
+    minWidth: "150",
+    prop: "updateTime"
+  },
+  {
     label: "操作",
     width: "100",
-    render: () => {
-      return <elButton type="primary" size="small" icon={Edit} />
+    render: ({ row }) => {
+      return (
+        <elButton
+          type="primary"
+          size="small"
+          icon={Edit}
+          onClick={() => handleModal("edit", row)}
+        />
+      )
     }
   }
 ]
@@ -108,6 +98,40 @@ const lvConfig = ref({
   filterButtons,
   tableColumns
 })
+
+function handleModal(type = "add", row?) {
+  const isEdit = type === "edit"
+  useDialog({
+    title: `${isEdit ? "编辑" : "添加"}图片`,
+    width: "800px",
+    fullScreenEnable: false,
+    content: <Modal row-data={row} />,
+    buttons: [
+      {
+        label: "保存",
+        type: "primary",
+        loading: false,
+        onClick: ({ vm, component, ctx }) => {
+          component.submit({
+            loading(loading: boolean) {
+              ctx.loading = loading
+            },
+            search: () => {
+              vm.hide()
+              listview.value.search(true)
+            }
+          })
+        }
+      },
+      {
+        label: "取消",
+        onClick: ({ vm }) => {
+          vm.hide()
+        }
+      }
+    ]
+  })
+}
 </script>
 
 <style lang="scss" scoped>
