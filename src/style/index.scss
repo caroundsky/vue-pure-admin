@@ -32,3 +32,7 @@
 .lv-content .el-table {
   font-size: 12px;
 }
+
+.el-dialog.service-dialog {
+  --el-dialog-padding-primary: 0;
+}

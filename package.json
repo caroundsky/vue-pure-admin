@@ -47,6 +47,7 @@
     "url": "https://github.com/xiaoxian521"
   },
   "dependencies": {
+    "@caroundsky/el-plus-dialog-service": "^0.0.5",
     "@laomao800/vue-listview": "3",
     "@pureadmin/descriptions": "^1.2.1",
     "@pureadmin/table": "^3.1.2",
