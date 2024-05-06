@@ -12,9 +12,12 @@ import useDialog from "@caroundsky/el-plus-dialog-service"
 
 import { baseUrlApi } from "@/utils"
 import { getToken, formatToken } from "@/utils/auth"
+import dayjs from "dayjs"
+import { delImage } from "@/api/images-manage"
 
-import { Edit } from "@element-plus/icons-vue"
+import { Edit, Delete } from "@element-plus/icons-vue"
 import Modal from "./modal.vue"
+import { message } from "@/utils/message"
 
 defineOptions({
   name: "ImageManage"
@@ -52,6 +55,11 @@ const tableColumns = [
     prop: "name"
   },
   {
+    label: "描述",
+    minWidth: "150",
+    prop: "desc"
+  },
+  {
     label: "标签",
     minWidth: "150",
     prop: "tag"
@@ -59,19 +67,42 @@ const tableColumns = [
   {
     label: "更新时间",
     minWidth: "150",
-    prop: "updateTime"
+    prop: "update_time",
+    formatter: row =>
+      row.update_time
+        ? dayjs(row.update_time).format("YYYY-MM-DD HH:mm:ss")
+        : ""
   },
   {
     label: "操作",
-    width: "100",
+    width: "110",
     render: ({ row }) => {
       return (
-        <elButton
-          type="primary"
-          size="small"
-          icon={Edit}
-          onClick={() => handleModal("edit", row)}
-        />
+        <div>
+          <el-button
+            type="primary"
+            size="small"
+            icon={Edit}
+            onClick={() => handleModal("edit", row)}
+          />
+          <el-popconfirm
+            title="确认删除吗?"
+            onConfirm={() =>
+              delImage(row.id).then(({ success, data }) => {
+                if (success) {
+                  message(data.message, { type: "success" })
+                  listview.value.search(true)
+                }
+              })
+            }
+          >
+            {{
+              reference: () => {
+                return <el-button type="danger" size="small" icon={Delete} />
+              }
+            }}
+          </el-popconfirm>
+        </div>
       )
     }
   }

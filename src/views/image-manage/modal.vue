@@ -1,6 +1,6 @@
 <template>
   <div class="images-modal">
-    <el-form :model="form" label-width="100px">
+    <el-form ref="formRef" :model="form" label-width="100px">
       <el-form-item
         label="图片地址："
         prop="url"
@@ -21,11 +21,7 @@
         <el-input v-model="form.name" placeholder="请输入图片名称" />
       </el-form-item>
 
-      <el-form-item
-        label="描述："
-        prop="desc"
-        :rules="[{ required: true, trigger: 'blur', message: '请输入描述' }]"
-      >
+      <el-form-item label="描述：" prop="desc">
         <el-input
           v-model="form.desc"
           type="textarea"
@@ -37,15 +33,22 @@
 </template>
 
 <script setup lang="tsx">
-import { reactive } from "vue"
-import { modifyImage } from "@/api/images-manage"
+import { reactive, computed, ref } from "vue"
+import { addImage, modifyImage } from "@/api/images-manage"
 import { message } from "@/utils/message"
+import type { FormInstance } from "element-plus"
 
 defineOptions({
   name: "ImagesModal"
 })
 
 const { rowData } = defineProps(["rowData"])
+
+const isEdit = computed(() => {
+  return !!rowData
+})
+
+const formRef = ref<FormInstance>()
 
 const form = reactive({
   url: "",
@@ -56,14 +59,20 @@ const form = reactive({
 
 Object.assign(form, rowData)
 
-async function submit({ loading, search }) {
-  loading(true)
-  const { success } = await modifyImage({ id: rowData.id, ...form }).catch(() =>
-    loading(false)
-  )
-  if (!success) return
-  message("保持成功", { type: "success" })
-  search()
+function submit({ loading, search }) {
+  formRef.value.validate(async valid => {
+    if (valid) {
+      loading(true)
+      const { success } = isEdit.value
+        ? await modifyImage({ id: rowData.id, ...form }).catch(() =>
+            loading(false)
+          )
+        : await addImage(form).catch(() => loading(false))
+      if (!success) return
+      message(`${isEdit.value ? "保存" : "添加"}成功`, { type: "success" })
+      search()
+    }
+  })
 }
 
 defineExpose({
