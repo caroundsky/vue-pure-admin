@@ -159,7 +159,7 @@ class PureHttp {
     const config = {
       method,
       url,
-      baseURL: VITE_ENV === "dev" ? "/api" : "",
+      baseURL: VITE_ENV === "dev" ? "/api" : "/api",
       ...param,
       ...axiosConfig
     } as PureHttpRequestConfig
