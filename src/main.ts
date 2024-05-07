@@ -5,7 +5,11 @@ import { getPlatformConfig } from "./config"
 import { MotionPlugin } from "@vueuse/motion"
 // import { useEcharts } from "@/plugins/echarts";
 import { createApp, type Directive } from "vue"
-import { useElementPlus } from "@/plugins/elementPlus"
+// import { useElementPlus } from "@/plugins/elementPlus"
+
+import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 import { injectResponsiveStorage } from "@/utils/responsive"
 import useDialog from "@caroundsky/el-plus-dialog-service"
 
@@ -56,7 +60,9 @@ getPlatformConfig(app).then(async config => {
   app.use(router)
   await router.isReady()
   injectResponsiveStorage(app, config)
-  app.use(MotionPlugin).use(useElementPlus).use(Table)
+  app.use(MotionPlugin).use(ElementPlus, {
+    locale: zhCn,
+  }).use(Table)
   // .use(PureDescriptions)
   // .use(useEcharts);
   app.mount("#app")

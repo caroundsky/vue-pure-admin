@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="tsx">
-import { ref, reactive } from "vue"
+import { ref, reactive, onMounted, computed } from "vue"
 // @ts-ignore
 import { Listview } from "@laomao800/vue-listview"
 import useDialog from "@caroundsky/el-plus-dialog-service"
@@ -13,7 +13,7 @@ import useDialog from "@caroundsky/el-plus-dialog-service"
 import { baseUrlApi } from "@/utils"
 import { getToken, formatToken } from "@/utils/auth"
 import dayjs from "dayjs"
-import { delImage } from "@/api/images-manage"
+import { delImage, getTag } from "@/api/images-manage"
 
 import { Edit, Delete } from "@element-plus/icons-vue"
 import Modal from "./modal.vue"
@@ -34,7 +34,7 @@ const filterButtons = [
 ]
 const tableColumns = [
   {
-    label: "图片",
+    label: "相片",
     width: "150",
     prop: "url",
     render: ({ row }) => {
@@ -50,19 +50,27 @@ const tableColumns = [
     }
   },
   {
-    label: "图片名称",
+    label: "相片名称",
     minWidth: "150",
     prop: "name"
   },
   {
     label: "描述",
     minWidth: "150",
-    prop: "desc"
+    prop: "desc",
+    "show-overflow-tooltip": true
   },
   {
     label: "标签",
     minWidth: "150",
-    prop: "tag"
+    formatter: row => {
+      return tagListMap.value[row.tag]
+    }
+  },
+  {
+    label: "相片月份",
+    width: "150",
+    prop: "time_range"
   },
   {
     label: "更新时间",
@@ -136,7 +144,7 @@ function handleModal(type = "add", row?) {
     title: `${isEdit ? "编辑" : "添加"}图片`,
     width: "800px",
     fullScreenEnable: false,
-    content: <Modal row-data={row} />,
+    content: <Modal row-data={row} tag-list={tagList} />,
     buttons: [
       {
         label: "保存",
@@ -145,6 +153,7 @@ function handleModal(type = "add", row?) {
         onClick: ({ vm, component, ctx }) => {
           component.submit({
             loading(loading: boolean) {
+              // @ts-ignore
               ctx.loading = loading
             },
             search: () => {
@@ -163,6 +172,20 @@ function handleModal(type = "add", row?) {
     ]
   })
 }
+
+const tagList = ref([])
+const tagListMap = computed(() => {
+  return tagList.value.reduce((result, cur) => {
+    result[cur.id] = cur.tag
+    return result
+  }, {})
+})
+
+onMounted(() => {
+  getTag().then(({ data }) => {
+    tagList.value = data
+  })
+})
 </script>
 
 <style lang="scss" scoped>
