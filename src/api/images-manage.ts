@@ -25,3 +25,20 @@ export const delImage = (id) => {
 export const getTag = () => {
   return http.request<Result>("get", "/images/get-tag")
 }
+
+export const modifyTag = (data) => {
+  return http.request<Result>("post", "/images/modify-tag", { data })
+}
+
+export const addTag = (data) => {
+  return http.request<Result>("post", "/images/add-tag", { data })
+}
+
+export const delTag = (id) => {
+  return http.request<{
+    success: boolean
+    data: {
+      message: string
+    }
+  }>("post", "/images/del-tag", { data: { id } })
+}

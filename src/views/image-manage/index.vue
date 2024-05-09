@@ -9,22 +9,46 @@ import { ref, reactive, onMounted, computed } from "vue"
 // @ts-ignore
 import { Listview } from "@laomao800/vue-listview"
 import useDialog from "@caroundsky/el-plus-dialog-service"
+import { Edit, Delete } from "@element-plus/icons-vue"
+import Modal from "./modal.vue"
 
 import { baseUrlApi } from "@/utils"
 import { getToken, formatToken } from "@/utils/auth"
 import dayjs from "dayjs"
-import { delImage, getTag } from "@/api/images-manage"
-
-import { Edit, Delete } from "@element-plus/icons-vue"
-import Modal from "./modal.vue"
 import { message } from "@/utils/message"
+import { useEventListener, useDebounceFn } from "@vueuse/core"
+
+import { delImage, getTag } from "@/api/images-manage"
 
 defineOptions({
   name: "ImageManage"
 })
 
 const listview = ref(null)
-const filterModel = reactive({})
+const tagList = ref([])
+
+const filterModel = reactive({
+  timeRange: [],
+  tagList: []
+})
+const filterFields = [
+  {
+    label: "月相片份",
+    type: "monthRange",
+    model: "timeRange",
+    componentAttrs: {
+      valueFormat: "YYYY-MM"
+    }
+  },
+  {
+    label: "标签",
+    type: "select",
+    model: "tagList",
+    multiple: true,
+    width: 200,
+    options: tagList
+  }
+]
 const filterButtons = [
   {
     text: "添加",
@@ -119,7 +143,7 @@ const tableColumns = [
 const lvConfig = ref({
   requestUrl: baseUrlApi("/images/query-page"),
   pagePosition: "right",
-  height: "100%",
+  // height: "100%",
   requestConfig: {
     headers: {
       Authorization: formatToken(getToken().accessToken)
@@ -135,7 +159,8 @@ const lvConfig = ref({
   },
   filterModel,
   filterButtons,
-  tableColumns
+  tableColumns,
+  filterFields
 })
 
 function handleModal(type = "add", row?) {
@@ -173,7 +198,6 @@ function handleModal(type = "add", row?) {
   })
 }
 
-const tagList = ref([])
 const tagListMap = computed(() => {
   return tagList.value.reduce((result, cur) => {
     result[cur.id] = cur.tag
@@ -183,17 +207,30 @@ const tagListMap = computed(() => {
 
 onMounted(() => {
   getTag().then(({ data }) => {
-    tagList.value = data
+    tagList.value = data.map(item => {
+      return {
+        label: item.tag,
+        value: item.id,
+        ...item
+      }
+    })
   })
 })
+
+useEventListener(
+  window,
+  "resize",
+  useDebounceFn(() => {
+    listview.value.updateLayout()
+  }, 100)
+)
 </script>
 
 <style lang="scss" scoped>
 .image-manage {
-  height: 91vh;
   &.main-content {
     margin: 0;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
   }
 }
 </style>

@@ -25,8 +25,13 @@
   filter: invert(80%);
 }
 
-.lv-filterbar .el-button {
-  font-size: 12px;
+.lv-filterbar {
+  .el-button,
+  .el-form-item__content,
+  .el-date-editor .el-range-input,
+  .el-select__wrapper {
+    font-size: 13px;
+  }
 }
 
 .lv-content .el-table {
