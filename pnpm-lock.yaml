@@ -41,6 +41,9 @@ dependencies:
   element-plus:
     specifier: ^2.7.1
     version: 2.7.2(vue@3.4.26)
+  get-img-wh:
+    specifier: ^1.0.1
+    version: 1.0.1
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -3600,6 +3603,10 @@ packages:
     resolution: {integrity: sha512-2nk+7SIVb14QrgXFHcm84tD4bKQz0RxPuMT8Ag5KPOq7J5fEmAg0UbXdTOSHqNuHSU28k55qnceesxXRZGzKWA==}
     engines: {node: '>=18'}
     dev: true
+
+  /get-img-wh@1.0.1:
+    resolution: {integrity: sha512-S+v3eU/isUFx3zYi6T5j3E0fXQ1PFF7+KoGXz8ao74w4V1HktUhEyWj2LStaYtK6XdzI3PHqaE6kv0VgfBvh/A==}
+    dev: false
 
   /get-intrinsic@1.2.4:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}

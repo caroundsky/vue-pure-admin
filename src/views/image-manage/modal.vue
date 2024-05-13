@@ -61,6 +61,7 @@ import { reactive, computed, toRefs, ref } from "vue"
 import { addImage, modifyImage } from "@/api/images-manage"
 import { message } from "@/utils/message"
 import type { FormInstance } from "element-plus"
+import getImgWH from "get-img-wh"
 
 defineOptions({
   name: "ImagesModal"
@@ -88,11 +89,17 @@ Object.assign(form, rowData.value)
 function submit({ loading, search }) {
   formRef.value.validate(async valid => {
     if (valid) {
+      const { width, height } = await getImgWH(form.url).catch(() => {
+        message("图片读取失败，请检查图片路径", { type: "warning" })
+      })
       loading(true)
       const { success } = isEdit.value
-        ? await modifyImage({ id: rowData.value.id, ...form }).catch(() =>
-            loading(false)
-          )
+        ? await modifyImage({
+            id: rowData.value.id,
+            ...form,
+            width,
+            height
+          }).catch(() => loading(false))
         : await addImage(form).catch(() => loading(false))
       if (!success) return
       message(`${isEdit.value ? "保存" : "添加"}成功`, { type: "success" })
