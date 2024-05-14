@@ -89,7 +89,7 @@ Object.assign(form, rowData.value)
 function submit({ loading, search }) {
   formRef.value.validate(async valid => {
     if (valid) {
-      const { width, height } = await getImgWH(form.url).catch(() => {
+      const { width, height } = await getImgWH(form.url).catch(err => {
         message("图片读取失败，请检查图片路径", { type: "warning" })
       })
       loading(true)
@@ -100,7 +100,11 @@ function submit({ loading, search }) {
             width,
             height
           }).catch(() => loading(false))
-        : await addImage(form).catch(() => loading(false))
+        : await addImage({
+            ...form,
+            width,
+            height
+          }).catch(() => loading(false))
       if (!success) return
       message(`${isEdit.value ? "保存" : "添加"}成功`, { type: "success" })
       search()
