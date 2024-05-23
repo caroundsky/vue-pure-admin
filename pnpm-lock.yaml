@@ -32,6 +32,9 @@ dependencies:
   axios:
     specifier: ^1.6.8
     version: 1.6.8
+  cos-js-sdk-v5:
+    specifier: ^1.7.1
+    version: 1.7.1
   dayjs:
     specifier: ^1.11.10
     version: 1.11.11
@@ -2155,6 +2158,11 @@ packages:
       - vue
     dev: false
 
+  /@xmldom/xmldom@0.8.10:
+    resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
+    engines: {node: '>=10.0.0'}
+    dev: false
+
   /@zougt/some-loader-utils@1.4.3:
     resolution: {integrity: sha512-0FsoqSTQ+qOyp6x5Q6LZQ7xVwquEgLYiIStG3L8p0Q2GsGGYKDkOZ0mIpMt67aNdr8XLsbxXjzTl/iHtTz5zcA==}
     engines: {node: '>= 10.13.0'}
@@ -2663,6 +2671,12 @@ packages:
     resolution: {integrity: sha512-1j20GZTsvKNkc4BY3NpMOM8tt///wY3FpIzozTOFO2ffuZcV61nojHXVKIy3WM+7ADCy5FVhdZYHYDdgTU0yJw==}
     dependencies:
       is-what: 3.14.1
+    dev: false
+
+  /cos-js-sdk-v5@1.7.1:
+    resolution: {integrity: sha512-0iEPck4nsgGA7FwTCsNMBYPctOCO1Qb04x6RZYYnRJ+tazUO7JIFElORjIsgFqCGpIov8pNsFS18WumGgQPzDQ==}
+    dependencies:
+      '@xmldom/xmldom': 0.8.10
     dev: false
 
   /cosmiconfig-typescript-loader@5.0.0(@types/node@20.12.8)(cosmiconfig@9.0.0)(typescript@5.4.5):

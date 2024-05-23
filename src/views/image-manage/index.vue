@@ -20,6 +20,10 @@ import { useEventListener, useDebounceFn } from "@vueuse/core"
 
 import { delImage, getTag } from "@/api/images-manage"
 
+import CosSdk from "./cosSDK"
+
+const $cos = new CosSdk()
+
 defineOptions({
   name: "ImageManage"
 })
@@ -124,6 +128,7 @@ const tableColumns = [
                 if (success) {
                   message(data.message, { type: "success" })
                   listview.value.search(true)
+                  $cos.delCosImg(row.key)
                 }
               })
             }
