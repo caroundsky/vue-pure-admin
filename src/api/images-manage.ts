@@ -21,3 +21,13 @@ export const delImage = id => {
     }
   }>("post", "/images/del-image", { data: { id } })
 }
+
+export const uploadImage = data => {
+  return http.request<any>("post", "/images/tiny-images", {
+    data,
+    responseType: "blob",
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  })
+}

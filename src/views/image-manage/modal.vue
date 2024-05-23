@@ -8,7 +8,10 @@
           { required: true, trigger: 'blur', message: '请输入图片地址' }
         ]"
       >
-        <el-input v-model="form.url" placeholder="请输入图片地址" />
+        <!-- <el-input v-model="form.url" placeholder="请输入图片地址" /> -->
+        <el-upload :limit="1" :http-request="handleRequest">
+          <el-button type="primary">Click to upload</el-button>
+        </el-upload>
       </el-form-item>
 
       <el-form-item
@@ -34,7 +37,7 @@
 
 <script setup lang="tsx">
 import { reactive, computed, ref } from "vue"
-import { addImage, modifyImage } from "@/api/images-manage"
+import { addImage, modifyImage, uploadImage } from "@/api/images-manage"
 import { message } from "@/utils/message"
 import type { FormInstance } from "element-plus"
 
@@ -72,6 +75,20 @@ function submit({ loading, search }) {
       message(`${isEdit.value ? "保存" : "添加"}成功`, { type: "success" })
       search()
     }
+  })
+}
+
+function handleRequest({ file }: any) {
+  const { name, type } = file
+  const formData = new FormData()
+  formData.append("file", file)
+  formData.append("fileType", type)
+  uploadImage(formData).then((res: Blob) => {
+    const file = new File([res], name, {
+      lastModified: new Date().getTime(),
+      type
+    })
+    console.log(file)
   })
 }
 
