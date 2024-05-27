@@ -22,8 +22,11 @@
           :http-request="handleUpload"
           :auto-upload="false"
           style="width: 100%"
+          drag
         >
-          <el-button type="primary">上传图片</el-button>
+          <div class="el-upload__text">
+            将文件拖到此处，或 <em>点击上传</em>
+          </div>
         </el-upload>
       </el-form-item>
 
@@ -37,17 +40,12 @@
         <span
           v-if="CosSdk.count !== null"
           style="font-size: 12px; margin-left: 10px"
-          >可压缩次数：{{ remainTime }}</span
         >
+          可压缩次数：{{ remainTime }}
+        </span>
       </el-form-item>
 
-      <el-form-item
-        label="相片名称："
-        prop="name"
-        :rules="[
-          { required: true, trigger: 'blur', message: '请输入图片名称' }
-        ]"
-      >
+      <el-form-item label="相片名称：" prop="name">
         <el-input v-model="form.name" placeholder="请输入图片名称" />
       </el-form-item>
 
@@ -82,6 +80,23 @@
           placeholder="请输入简述"
         />
       </el-form-item>
+
+      <div>
+        <p>
+          Tips:
+          <span>
+            可选择
+            <el-link
+              type="primary"
+              :underline="false"
+              style="vertical-align: baseline"
+              @click.native="() => open()"
+              >手动压缩</el-link
+            >
+            图片，压缩后建议关闭【压缩图片】开关再上传，防止二次压缩造成图片质量降低
+          </span>
+        </p>
+      </div>
     </el-form>
   </div>
 </template>
@@ -207,6 +222,10 @@ async function handleUpload({ file }) {
         proxyDialog.loading(false)
       })
   }
+}
+
+function open() {
+  window.open("//caroundsky.site/imgZip")
 }
 
 defineExpose({

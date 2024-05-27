@@ -8,6 +8,10 @@
       >
         <el-input v-model="form.tag" placeholder="请输入标签名" />
       </el-form-item>
+
+      <el-form-item label="排序：" prop="sort">
+        <el-input-number v-model="form.sort" placeholder="请输入序号" />
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -32,7 +36,8 @@ const isEdit = computed(() => {
 const formRef = ref<FormInstance>()
 
 const form = reactive({
-  tag: ""
+  tag: "",
+  sort: 0
 })
 
 Object.assign(form, rowData.value)

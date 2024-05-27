@@ -38,6 +38,10 @@ const tableColumns = [
     prop: "tag"
   },
   {
+    label: "排序",
+    prop: "sort"
+  },
+  {
     label: "更新时间",
     minWidth: "150",
     prop: "update_time",

@@ -33,22 +33,22 @@ const tagList = ref([])
 
 const filterModel = reactive({
   timeRange: [],
-  tagList: []
+  tag: []
 })
 const filterFields = [
-  {
-    label: "月相片份",
-    type: "monthRange",
-    model: "timeRange",
-    componentAttrs: {
-      valueFormat: "YYYY-MM"
-    }
-  },
+  // {
+  //   label: "月相片份",
+  //   type: "monthRange",
+  //   model: "timeRange",
+  //   componentAttrs: {
+  //     valueFormat: "YYYY-MM"
+  //   }
+  // },
   {
     label: "标签",
     type: "select",
-    model: "tagList",
-    multiple: true,
+    model: "tag",
+    // multiple: true,
     width: 200,
     options: tagList
   }
@@ -173,6 +173,7 @@ function handleModal(type = "add", row?) {
   useDialog({
     title: `${isEdit ? "编辑" : "添加"}图片`,
     width: "800px",
+    top: "10vh",
     fullScreenEnable: false,
     content: <Modal row-data={row} tag-list={tagList} />,
     buttons: [

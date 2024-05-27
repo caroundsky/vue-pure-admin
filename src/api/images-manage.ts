@@ -50,6 +50,7 @@ export const tinypng = file => {
     "/images/tiny-images",
     {
       data: file,
+      timeout: 60000,
       responseType: "blob",
       headers: {
         "Content-Type": "multipart/form-data"
